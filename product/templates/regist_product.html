@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-bs4.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-bs4.js"></script>
+
+     <script>
+     $(document).ready(function () {
+      $('#id_description').summernote({
+        placeholder: '입력해주세요',
+        tabsize: 2,
+        height: 300
+      });
+      });
+    </script>
+{% endblock %}
+
+{% block content %}
+
+    <div class="row mt-5">
+        <div class="col-12 text-center">
+            <h1>상품 등록</h1>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-12">
+            {{ error }}
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-12">
+            <form method="post" action=".">
+            {% csrf_token %}
+
+            {% for f in form %}
+                <div class="form-group">
+                    <label for="{{ f.id_for_label }}">{{ f.label }}</label>
+                    {% ifequal f.name 'description'  %}
+                        <textarea class="form-control" id="{{ f.id_for_label }}" name="{{f.name}}"></textarea>
+                    {% else %}
+                    <input type="{{ f.field.widget.input_type }}" class="form-control" id="{{ f.id_for_label }}" name="{{f.name}}" placeholder="{{ f.label }}" >
+                    {% endifequal %}
+                </div>
+
+                {% if f.errors %}
+                    <span class="text-danger">{{ f.errors }}</span>
+                {% endif %}
+            {% endfor %}
+
+            <button type="submit" class="btn btn-primary">생성</button>
+        </form>
+        </div>
+    </div>
+
+{% endblock %}
