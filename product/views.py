@@ -1,8 +1,10 @@
 from django.shortcuts import render
 
 # Create your views here.
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, FormView, DetailView
 
+from fcuser.decorators import login_required, admin_required
 from order.forms import OrderForm
 from product.forms import RegisterForm
 from product.models import Product
@@ -14,6 +16,7 @@ class ProductList(ListView):
     context_object_name = "product_list"
 
 
+@method_decorator(admin_required, name='dispatch')
 class ProductCreate(FormView):
     template_name = "regist_product.html"
     form_class = RegisterForm
