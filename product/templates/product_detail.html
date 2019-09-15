@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block content %}
+
+    <div class="row">
+    <div class="col-12">
+
+        <div class="card" style="width: 100%">
+
+            <div class="card-body">
+                <h5 class="card-title">{{ product.name }}</h5>
+            </div>
+            <ul class = "list-group list-group-flush">
+                <li class="list-group-item">
+
+                    <form method="post" action="/order/create/">
+
+                        {% csrf_token %}
+
+            {% for f in form %}
+                <div class="form-group">
+                    {%  ifnotequal f.name 'product' %}
+                    <label for="{{ f.id_for_label }}">{{ f.label }}</label>
+                    {% endifnotequal %}
+                    <input type="{{ f.field.widget.input_type }}" class="form-control" id="{{ f.id_for_label }}" name="{{f.name}}" placeholder="{{ f.label }}" value = "{% ifequal f.name 'product' %}{{ product.id }}{% endifequal %}">
+                </div>
+
+                {% if f.errors %}
+                    <span class="text-danger">{{ f.errors }}</span>
+                {% endif %}
+            {% endfor %}
+
+                        <button type='submit' class = "btn btn-primary">주문하기</button>
+
+                    </form>
+
+                </li>
+                <li class="list-group-item">가격: {{ product.price|intcomma }}원</li>
+                <li class="list-group-item">등록날짜 : {{ product.register_date|date:'Y-m-d H:i' }}</li>
+                <li class="list-group-item">재고 : {{ product.stock|intcomma }}</li>
+                <li class="list-group-item">{{ product.description|safe }}</li>
+            </ul>
+
+        </div>
+
+    </div>
+    </div>
+
+    <div class="row">
+        <div class = "col-12">
+            <a href = "/product/" class="btn btn-light">돌아가기</a>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
