@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="row mt-5">
+        <div class="col-12 text-center">
+            <h1>로그인</h1>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-12">
+            {{ error }}
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-12">
+            <form method="post" action=".">
+            {% csrf_token %}
+
+            {% for f in form %}
+                <div class="form-group">
+                    <label for="{{ f.id_for_label }}">{{ f.label }}</label>
+                    <input type="{{ f.field.widget.input_type }}" class="form-control" id="{{ f.id_for_label }}" name="{{f.name}}" placeholder="{{ f.label }}" >
+                </div>
+
+                {% if f.errors %}
+                    <span class="text-danger">{{ f.errors }}</span>
+                {% endif %}
+            {% endfor %}
+
+            <button type="submit" class="btn btn-primary">로그인</button>
+        </form>
+        </div>
+    </div>
+
+{% endblock %}
